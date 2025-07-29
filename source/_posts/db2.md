@@ -8,7 +8,6 @@ tags:
   - Mainframe
   - z/OS
 categories:
-  - Mainframe
   - Database
 intro: |
   A comprehensive reference guide for DB2 database including SQL statements, data types, functions, and mainframe-specific features.
