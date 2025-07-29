@@ -4,7 +4,6 @@ date: 2025-07-29 10:32:03
 background: bg-indigo-900
 tags:
 categories:
-  - Mainframe
   - Programming
 intro: |
   A quick reference guide to COBOL syntax and concepts, ideal for beginners or those returning to mainframe development.
