@@ -11,9 +11,9 @@ plugins:
   - copyCode
 ---
 
-## 📂 COBOL Program Structure
+## Program Structure
 
-### 📂 COBOL Program Example
+### Basic Program Template
 
 ```cobol
 IDENTIFICATION DIVISION.
@@ -30,55 +30,38 @@ PROCEDURE DIVISION.
     STOP RUN.
 ```
 
-## 📊 Variables and Simple Types
+### Four Main Divisions
 
-### 🧠 Most Used COBOL Types
+| Division                  | Purpose                  |
+| ------------------------- | ------------------------ |
+| `IDENTIFICATION DIVISION` | Program identification   |
+| `ENVIRONMENT DIVISION`    | System environment setup |
+| `DATA DIVISION`           | Variable declarations    |
+| `PROCEDURE DIVISION`      | Executable code          |
 
-| Syntax         | Data Type                | Example                |
-| -------------- | ------------------------ | ---------------------- |
-| `PIC 9(n)`     | Positive integer         | `PIC 9(5)` → 00042     |
-| `PIC S9(n)`    | Signed integer           | `PIC S9(5)` → -00123   |
-| `PIC 9(n)V99`  | Decimal number (virtual) | `PIC 9(3)V99` → 123.45 |
-| `PIC A(n)`     | Alphabetic characters    | `PIC A(10)` → "MILAN"  |
-| `PIC X(n)`     | Free alphanumeric string | `PIC X(10)` → "ABC123" |
-| `PIC +ZZZ9.99` | Display format with sign | `+0123.45`, `-0098.60` |
+## Data Types & Variables {.row-span-2}
 
-### 💡 Example
+### Picture Clauses
+
+| Syntax         | Data Type         | Example                |
+| -------------- | ----------------- | ---------------------- |
+| `PIC 9(n)`     | Positive integer  | `PIC 9(5)` → 00042     |
+| `PIC S9(n)`    | Signed integer    | `PIC S9(5)` → -00123   |
+| `PIC 9(n)V99`  | Decimal number    | `PIC 9(3)V99` → 123.45 |
+| `PIC A(n)`     | Alphabetic only   | `PIC A(10)` → "MILAN"  |
+| `PIC X(n)`     | Alphanumeric      | `PIC X(10)` → "ABC123" |
+| `PIC +ZZZ9.99` | Formatted display | `+0123.45`             |
+
+### Variable Declaration Examples
 
 ```cobol
 01 AGE         PIC 99.        *> 2-digit integer
-01 BALANCE     PIC S9(5)V99.  *> Number with decimals (signed)
+01 BALANCE     PIC S9(5)V99.  *> Signed decimal
 01 NAME        PIC A(30).     *> Alpha string
+01 CODE        PIC X(10).     *> Alphanumeric
 ```
 
-### ✉ ACCEPT & DISPLAY (input/output)
-
-```cobol
-DISPLAY "What is your name?"
-ACCEPT NAME
-DISPLAY "Hello " NAME
-```
-
-### ➕ COMPUTE, MOVE, IF
-
-```cobol
-COMPUTE VAT = PRICE * RATE / 100
-IF AGE > 18
-    MOVE "adult" TO STATUS
-ELSE
-    MOVE "minor" TO STATUS
-END-IF
-```
-
-### 🛠️ PERFORM (loops)
-
-```cobol
-PERFORM VARYING I FROM 1 BY 1 UNTIL I > 5
-    DISPLAY "Round: " I
-END-PERFORM
-```
-
-### 🧱 Nested Structures (GROUP LEVEL)
+### Group Data Items
 
 ```cobol
 01 CLIENT.
@@ -87,7 +70,7 @@ END-PERFORM
    05 AGE         PIC 99.
 ```
 
-### 📄 Arrays (OCCURS)
+### Arrays (OCCURS)
 
 ```cobol
 01 ACCOUNTS.
@@ -96,7 +79,17 @@ END-PERFORM
       10 BALANCE     PIC 9(7)V99.
 ```
 
-### 🌐 File Reading/Display (intro)
+## Input/Output Operations
+
+### Basic I/O
+
+```cobol
+DISPLAY "What is your name?"
+ACCEPT NAME
+DISPLAY "Hello " NAME
+```
+
+### File Operations
 
 ```cobol
 SELECT FILE-DATA ASSIGN TO 'data.txt'
@@ -112,7 +105,19 @@ END-READ
 CLOSE FILE-DATA
 ```
 
-### 📅 EVALUATE (switch-case)
+## Control Structures
+
+### Conditional Statements
+
+```cobol
+IF AGE > 18
+    MOVE "adult" TO STATUS
+ELSE
+    MOVE "minor" TO STATUS
+END-IF
+```
+
+### EVALUATE (Switch-Case)
 
 ```cobol
 EVALUATE CHOICE
@@ -122,7 +127,44 @@ EVALUATE CHOICE
 END-EVALUATE
 ```
 
-### 📊 DB2 (embedded SQL intro)
+### Loops (PERFORM)
+
+```cobol
+PERFORM VARYING I FROM 1 BY 1 UNTIL I > 5
+    DISPLAY "Round: " I
+END-PERFORM
+```
+
+## Operations & Calculations
+
+### MOVE Statement
+
+```cobol
+MOVE "John" TO NAME
+MOVE ZEROS TO COUNTER
+MOVE SPACES TO DESCRIPTION
+```
+
+### COMPUTE Statement
+
+```cobol
+COMPUTE VAT = PRICE * RATE / 100
+COMPUTE TOTAL = PRICE + VAT
+COMPUTE AVERAGE = TOTAL / COUNT
+```
+
+### Arithmetic Operations
+
+```cobol
+ADD 1 TO COUNTER
+SUBTRACT TAX FROM GROSS-PAY
+MULTIPLY HOURS BY RATE GIVING PAY
+DIVIDE TOTAL BY COUNT GIVING AVERAGE
+```
+
+## Database Integration
+
+### Embedded SQL (DB2)
 
 ```cobol
 EXEC SQL
@@ -132,14 +174,61 @@ EXEC SQL
 END-EXEC.
 ```
 
-> Uses `SQLCA`, `:VARIABLE`, and a DB2 precompiler to work.
+### SQL Error Handling
 
-### ⛏ JCL (Job Control Language)
+```cobol
+EXEC SQL
+    INSERT INTO CUSTOMER VALUES (:WS-CUSTOMER)
+END-EXEC.
+
+IF SQLCODE NOT = 0
+    DISPLAY "SQL Error: " SQLCODE
+END-IF
+```
+
+## Mainframe Integration
+
+### JCL (Job Control Language)
 
 ```jcl
 //MYJOB    JOB (ACCT),'MY JOB',CLASS=A
-//STEP01   EXEC PGM=CALCULS
+//STEP01   EXEC PGM=COBOLPGM
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+```
+
+### Compiling COBOL
+
+```jcl
+//COMPILE  EXEC PGM=IGYCRCTL
+//STEPLIB  DD DSN=IGY.SIGYCOMP,DISP=SHR
+//SYSIN    DD DSN=MY.COBOL.SOURCE(PROGRAM),DISP=SHR
 //SYSPRINT DD SYSOUT=*
 ```
 
-> Used to execute a COBOL program on a mainframe.
+## Common Functions & Intrinsics
+
+### String Functions
+
+```cobol
+FUNCTION UPPER-CASE(NAME)
+FUNCTION LOWER-CASE(TEXT)
+FUNCTION LENGTH(STRING-VAR)
+FUNCTION TRIM(INPUT-STRING)
+```
+
+### Numeric Functions
+
+```cobol
+FUNCTION NUMVAL(NUMERIC-STRING)
+FUNCTION INTEGER(DECIMAL-NUMBER)
+FUNCTION MOD(DIVIDEND, DIVISOR)
+```
+
+### Date Functions
+
+```cobol
+FUNCTION CURRENT-DATE
+FUNCTION INTEGER-OF-DATE(DATE-VAR)
+FUNCTION DATE-OF-INTEGER(INTEGER-VAR)
+```
