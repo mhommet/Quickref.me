@@ -6,7 +6,6 @@ tags:
   - script
   - windows
 categories:
-  - Programming
   - Operating System
 intro: This is a quick reference cheat sheet to getting started with PowerShell scripting.
 plugins:
