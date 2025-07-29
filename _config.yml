@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: CheatSheets.zip
-subtitle: "Ultimate Cheat for Developers"
-description: "Share quick reference and cheat sheet for developers"
-keywords: cheat,sheet,cheatsheets,reference,programming,code table,snippets,linux,command,shortcuts,developers
-author: Fechin
+title: refs.hommet.ch
+subtitle: "My personal cheatsheets"
+description: "My personal cheatsheets"
+keywords: cheat,sheet,cheatsheets,reference,programming,code table,snippets,linux,command,shortcuts,developers,hommet,hommet.ch
+author: mhommet
 language: en
 timezone: "UTC"
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://votre-projet.vercel.app
+url: https://refs.hommet.ch
 root: /
 permalink: :name.html
 permalink_defaults:
