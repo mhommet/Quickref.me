@@ -13,6 +13,43 @@ plugins:
 
 ## Program Structure
 
+### COBOL Column Layout
+
+COBOL utilise un format de colonnes strict (mode FIXED) ou libre (mode FREE) :
+
+**Mode FIXED (traditionnel) :**
+
+```cobol
+*> Colonnes 1-6  : Numéros de séquence (optionnel)
+*> Colonne 7     : Indicateur (*, /, D, -, etc.)
+*> Colonnes 8-11 : Zone A (divisions, sections, paragraphes)
+*> Colonnes 12-72: Zone B (instructions, données)
+*> Colonnes 73-80: Identification (ignoré)
+
+000100 IDENTIFICATION DIVISION.
+000200 PROGRAM-ID. EXEMPLE.
+000300 DATA DIVISION.
+000400 WORKING-STORAGE SECTION.
+000500 01  COMPTEUR    PIC 9(3).
+000600 PROCEDURE DIVISION.
+000700     DISPLAY "Hello World"
+000800     STOP RUN.
+```
+
+**Mode FREE (moderne) :**
+
+```cobol
+>>SOURCE FORMAT IS FREE
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EXEMPLE.
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 COMPTEUR PIC 9(3).
+PROCEDURE DIVISION.
+    DISPLAY "Hello World"
+    STOP RUN.
+```
+
 ### Basic Program Template
 
 ```cobol
@@ -188,21 +225,69 @@ END-IF
 
 ## Mainframe Integration
 
-### JCL (Job Control Language)
+### Compilation COBOL
+
+**Compilation en mode FIXED (strict) :**
 
 ```jcl
-//MYJOB    JOB (ACCT),'MY JOB',CLASS=A
-//STEP01   EXEC PGM=COBOLPGM
+//COMPILE  JOB (ACCT),'COMPILE COBOL'
+//STEP1    EXEC PGM=IGYCRCTL,PARM='APOST'
+//STEPLIB  DD DSN=IGY.SIGYCOMP,DISP=SHR
+//SYSIN    DD DSN=MY.COBOL.SOURCE(PROG),DISP=SHR
 //SYSPRINT DD SYSOUT=*
-//SYSIN    DD *
+//SYSLIN   DD DSN=MY.OBJECT(PROG),DISP=(NEW,CATLG)
 ```
 
-### Compiling COBOL
+**Compilation en mode FREE :**
 
 ```jcl
-//COMPILE  EXEC PGM=IGYCRCTL
+//COMPILE  JOB (ACCT),'COMPILE FREE FORMAT'
+//STEP1    EXEC PGM=IGYCRCTL,PARM='APOST,SOURCE(FREE)'
 //STEPLIB  DD DSN=IGY.SIGYCOMP,DISP=SHR
-//SYSIN    DD DSN=MY.COBOL.SOURCE(PROGRAM),DISP=SHR
+//SYSIN    DD DSN=MY.COBOL.SOURCE(PROG),DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSLIN   DD DSN=MY.OBJECT(PROG),DISP=(NEW,CATLG)
+```
+
+### Options de Compilation Communes
+
+| Option          | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `SOURCE(FIXED)` | Mode colonnes traditionnelles (défaut)         |
+| `SOURCE(FREE)`  | Mode format libre                              |
+| `APOST`         | Utilise apostrophes pour délimiter les chaînes |
+| `QUOTE`         | Utilise guillemets pour délimiter les chaînes  |
+| `NOLIST`        | Supprime le listing source                     |
+| `XREF`          | Génère une table de références croisées        |
+| `MAP`           | Génère une carte mémoire                       |
+
+### JCL d'Exécution
+
+```jcl
+//MYJOB    JOB (ACCT),'RUN COBOL PROGRAM'
+//STEP01   EXEC PGM=COBOLPGM
+//STEPLIB  DD DSN=MY.LOAD.LIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//SYSIN    DD *
+données d'entrée
+/*
+```
+
+### Compilation et Link-Edit Complets
+
+```jcl
+//COMPLINK JOB (ACCT),'COMPILE AND LINK'
+//COMPILE  EXEC PGM=IGYCRCTL,PARM='APOST,XREF'
+//STEPLIB  DD DSN=IGY.SIGYCOMP,DISP=SHR
+//SYSIN    DD DSN=MY.COBOL.SOURCE(PROG),DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSLIN   DD DSN=&&OBJECT,DISP=(NEW,PASS),UNIT=SYSDA
+//
+//LINK     EXEC PGM=IEWL,PARM='MAP,LIST,XREF'
+//SYSLIB   DD DSN=CEE.SCEELKED,DISP=SHR
+//SYSLIN   DD DSN=&&OBJECT,DISP=(OLD,DELETE)
+//SYSLMOD  DD DSN=MY.LOAD.LIB(PROG),DISP=SHR
 //SYSPRINT DD SYSOUT=*
 ```
 
