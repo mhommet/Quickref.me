@@ -76,3 +76,19 @@ pre > code.wrap {
 .note-content pre code {
   padding: 1rem !important;
 }
+
+/* JCL specific formatting - preserve exact line structure */
+pre code.language-jcl {
+  white-space: pre !important;
+  word-wrap: normal !important;
+  overflow-wrap: normal !important;
+}
+
+@media (width <= 768px) {
+  pre code.language-jcl {
+    white-space: pre !important;
+    word-wrap: normal !important;
+    overflow-wrap: normal !important;
+    font-size: 0.75rem;
+  }
+}

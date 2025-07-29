@@ -6,10 +6,9 @@ tags:
 categories:
   - Programming
 intro: |
-  A quick reference guide to COBOL syntax and concepts, ideal for beginners or those returning to mainframe development.
+  A quick reference guide to COBOL syntax and concepts.
 plugins:
   - copyCode
-icon: https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/33b1ff/external-mainframe-technology-flatart-icons-outline-flatarticons.png
 ---
 
 ## 📂 COBOL Program Structure
@@ -35,14 +34,14 @@ PROCEDURE DIVISION.
 
 ### 🧠 Most Used COBOL Types
 
-| Syntax         | Data Type                    | Example                |
-| -------------- | ---------------------------- | ---------------------- |
-| `PIC 9(n)`     | Positive integer             | `PIC 9(5)` → 00042     |
-| `PIC S9(n)`    | Signed integer               | `PIC S9(5)` → -00123   |
-| `PIC 9(n)V99`  | Decimal number (virtual)     | `PIC 9(3)V99` → 123.45 |
-| `PIC A(n)`     | Alphabetic characters        | `PIC A(10)` → "MILAN"  |
-| `PIC X(n)`     | Free alphanumeric string     | `PIC X(10)` → "ABC123" |
-| `PIC +ZZZ9.99` | Display format with sign    | `+0123.45`, `-0098.60` |
+| Syntax         | Data Type                | Example                |
+| -------------- | ------------------------ | ---------------------- |
+| `PIC 9(n)`     | Positive integer         | `PIC 9(5)` → 00042     |
+| `PIC S9(n)`    | Signed integer           | `PIC S9(5)` → -00123   |
+| `PIC 9(n)V99`  | Decimal number (virtual) | `PIC 9(3)V99` → 123.45 |
+| `PIC A(n)`     | Alphabetic characters    | `PIC A(10)` → "MILAN"  |
+| `PIC X(n)`     | Free alphanumeric string | `PIC X(10)` → "ABC123" |
+| `PIC +ZZZ9.99` | Display format with sign | `+0123.45`, `-0098.60` |
 
 ### 💡 Example
 

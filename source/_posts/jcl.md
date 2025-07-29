@@ -32,8 +32,9 @@ input data
 ```
 
 All jobs use three main types of JCL statements:
+
 - One **JOB** statement to identify the unit of work
-- One or more **EXEC** statements for job steps  
+- One or more **EXEC** statements for job steps
 - One or more **DD** statements to identify data sets
 
 ## JOB Statement
@@ -59,14 +60,14 @@ The JOB statement is the first control statement in a job and marks the beginnin
 
 ### Common JOB Parameters
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `CLASS` | Job class for scheduling | `CLASS=A` |
-| `MSGCLASS` | Output message class | `MSGCLASS=H` |
-| `MSGLEVEL` | Message level control | `MSGLEVEL=(1,1)` |
-| `TIME` | Maximum execution time | `TIME=(0,30)` |
-| `REGION` | Memory allocation | `REGION=4M` |
-| `NOTIFY` | User to notify | `NOTIFY=&SYSUID` |
+| Parameter  | Description              | Example          |
+| ---------- | ------------------------ | ---------------- |
+| `CLASS`    | Job class for scheduling | `CLASS=A`        |
+| `MSGCLASS` | Output message class     | `MSGCLASS=H`     |
+| `MSGLEVEL` | Message level control    | `MSGLEVEL=(1,1)` |
+| `TIME`     | Maximum execution time   | `TIME=(0,30)`    |
+| `REGION`   | Memory allocation        | `REGION=4M`      |
+| `NOTIFY`   | User to notify           | `NOTIFY=&SYSUID` |
 
 ## EXEC Statement
 
@@ -98,12 +99,12 @@ The EXEC statement marks the beginning of a step and specifies the program to ru
 
 ### Common EXEC Parameters
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `PARM` | Parameters passed to program | `PARM='LIST,NOMAP'` |
-| `TIME` | Step time limit | `TIME=(0,5)` |
-| `REGION` | Step memory allocation | `REGION=1M` |
-| `COND` | Conditional execution | `COND=(4,LT)` |
+| Parameter | Description                  | Example             |
+| --------- | ---------------------------- | ------------------- |
+| `PARM`    | Parameters passed to program | `PARM='LIST,NOMAP'` |
+| `TIME`    | Step time limit              | `TIME=(0,5)`        |
+| `REGION`  | Step memory allocation       | `REGION=1M`         |
+| `COND`    | Conditional execution        | `COND=(4,LT)`       |
 
 ## DD Statement
 
@@ -151,20 +152,20 @@ Data Definition (DD) statements define the data sets that a program uses.
 DISP=(status,normal-disposition,abnormal-disposition)
 ```
 
-| Status | Description |
-|--------|-------------|
-| `NEW` | Create new data set |
-| `OLD` | Exclusive use of existing |
-| `SHR` | Shared use of existing |
-| `MOD` | Modify existing or create |
+| Status | Description               |
+| ------ | ------------------------- |
+| `NEW`  | Create new data set       |
+| `OLD`  | Exclusive use of existing |
+| `SHR`  | Shared use of existing    |
+| `MOD`  | Modify existing or create |
 
-| Disposition | Description |
-|-------------|-------------|
-| `KEEP` | Keep data set |
-| `DELETE` | Delete data set |
-| `CATLG` | Catalog data set |
-| `UNCATLG` | Uncatalog data set |
-| `PASS` | Pass to next step |
+| Disposition | Description        |
+| ----------- | ------------------ |
+| `KEEP`      | Keep data set      |
+| `DELETE`    | Delete data set    |
+| `CATLG`     | Catalog data set   |
+| `UNCATLG`   | Uncatalog data set |
+| `PASS`      | Pass to next step  |
 
 ### SPACE Parameter
 
@@ -173,9 +174,10 @@ SPACE=(unit,(primary,secondary,directory),RLSE)
 ```
 
 Examples:
+
 ```jcl
 SPACE=(CYL,(10,5))      // Cylinders
-SPACE=(TRK,(50,10))     // Tracks  
+SPACE=(TRK,(50,10))     // Tracks
 SPACE=(80,(100,20,10))  // Records
 ```
 
@@ -186,6 +188,7 @@ DCB=(RECFM=recfm,LRECL=length,BLKSIZE=size)
 ```
 
 Examples:
+
 ```jcl
 DCB=(RECFM=FB,LRECL=80,BLKSIZE=3200)   // Fixed blocked
 DCB=(RECFM=VB,LRECL=255,BLKSIZE=6144)  // Variable blocked
@@ -221,7 +224,7 @@ into the program
 
 ```jcl
 //INPUT    DD   DSN=FILE1,DISP=SHR
-//         DD   DSN=FILE2,DISP=SHR  
+//         DD   DSN=FILE2,DISP=SHR
 //         DD   DSN=FILE3,DISP=SHR
 ```
 
@@ -240,7 +243,7 @@ into the program
 ```jcl
 //         IF (STEP1.RC = 0) THEN
 //STEP2    EXEC PGM=PROG2
-//         ELSE  
+//         ELSE
 //STEP3    EXEC PGM=PROG3
 //         ENDIF
 ```
@@ -356,24 +359,24 @@ into the program
 
 ### Common Return Codes
 
-| Return Code | Meaning |
-|-------------|---------|
-| 0 | Successful execution |
-| 4 | Warning condition |
-| 8 | Error condition |
-| 12 | Severe error |
-| 16 | Terminal error |
+| Return Code | Meaning              |
+| ----------- | -------------------- |
+| 0           | Successful execution |
+| 4           | Warning condition    |
+| 8           | Error condition      |
+| 12          | Severe error         |
+| 16          | Terminal error       |
 
 ### COND Operators
 
-| Operator | Meaning |
-|----------|---------|
-| `GT` | Greater than |
-| `GE` | Greater than or equal |
-| `EQ` | Equal to |
-| `LE` | Less than or equal |
-| `LT` | Less than |
-| `NE` | Not equal to |
+| Operator | Meaning               |
+| -------- | --------------------- |
+| `GT`     | Greater than          |
+| `GE`     | Greater than or equal |
+| `EQ`     | Equal to              |
+| `LE`     | Less than or equal    |
+| `LT`     | Less than             |
+| `NE`     | Not equal to          |
 
 ## See Also
 
