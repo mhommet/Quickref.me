@@ -1,0 +1,14 @@
+services:
+  quickref:
+    build: .
+    container_name: quickref
+    restart: unless-stopped
+    networks:
+      - proxy_net
+    expose:
+      - 80
+
+networks:
+  proxy_net:
+    external: true
+
