@@ -10,26 +10,26 @@ on:
 
 jobs:
   deploy:
-    name: Déployer Quickref.me sur le serveur
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout du repo
+      - name: Checkout du code
         uses: actions/checkout@v4
 
-      - name: Ajouter la clé SSH
+      - name: Ajout de la clé SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copier les fichiers sur le VPS
+      - name: Synchronisation des fichiers avec le serveur
         run: |
-          rsync -az -e "ssh -o StrictHostKeyChecking=no" ./quickref/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/milan/services/quickref
+          rsync -az -e "ssh -o StrictHostKeyChecking=no" ./quickref/ \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/milan/services/quickref
 
-      - name: Rebuilder et relancer Quickref.me via Docker Compose
+      - name: Rebuild + restart du container Docker
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd /home/milan/services/quickref
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml up -d --build
+            docker compose down
+            docker compose up -d --build
           EOF
