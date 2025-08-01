@@ -27,6 +27,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd /home/milan/services/quickref
-            ls -la  # Debug : vérifier que docker-compose.yml est bien là
-            docker compose -f docker-compose.yml up -d --build
+            docker compose down || true
+            docker compose up -d --build
           EOF
+
