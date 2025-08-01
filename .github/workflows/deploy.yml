@@ -1,32 +1,35 @@
-name: Deploy Quickref
+name: Déploiement Quickref.me
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'quickref/**'
+      - '.github/workflows/deploy-quickref.yml'
 
 jobs:
   deploy:
+    name: Déployer Quickref.me sur le serveur
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout du repo
         uses: actions/checkout@v4
 
-      - name: Set up SSH
+      - name: Ajouter la clé SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Sync project to server
+      - name: Copier les fichiers sur le VPS
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/milan/services/quickref
+          rsync -az -e "ssh -o StrictHostKeyChecking=no" ./quickref/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/milan/services/quickref
 
-      - name: Build and restart container
+      - name: Rebuilder et relancer Quickref.me via Docker Compose
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd ~/services/quickref
-            docker compose build
-            docker compose up -d
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /home/milan/services/quickref
+            docker compose -f docker-compose.yml down
+            docker compose -f docker-compose.yml up -d --build
           EOF
